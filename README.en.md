@@ -1,19 +1,21 @@
 <div align="center">
 
-# 🏛️ College_Projects
+# 🐻🌲 College_Projects — UTM 🇪🇨
 
-### University Coursework, Labs & Academic Projects Repository
+### University Coursework, Labs & Academic Projects · **Universidad Técnica de Manabí (Ecuador)**
 
-[![Español](https://img.shields.io/badge/🇪🇸_Idioma-Español-334155?style=for-the-badge)](./README.md)
-[![English](https://img.shields.io/badge/🇺🇸_Language-English_(Active)-0ea5e9?style=for-the-badge)](./README.en.md)
+[![Español](https://img.shields.io/badge/🇪🇸_Idioma-Español-14532d?style=for-the-badge&labelColor=07170e)](./README.md)
+[![English](https://img.shields.io/badge/🇺🇸_Language-English_(Active)-16a34a?style=for-the-badge&labelColor=07170e)](./README.en.md)
+[![Mineral Studio](https://img.shields.io/badge/💎_Co--Founder-Mineral_Studio_(mineral--ec.com)-b3613d?style=for-the-badge&labelColor=1c120d)](https://mineral-ec.com/)
+[![Instagram](https://img.shields.io/badge/📸_Instagram-@mineralstudio.ec-d97706?style=for-the-badge&labelColor=1c120d)](https://www.instagram.com/mineralstudio.ec)
 
 </div>
 
 ---
 
-## 📚 Project Index
+## 📚 University Project Index (UTM 🇪🇨)
 
-This repository centralizes coursework, laboratory assignments, and academic projects developed during my university studies. Each directory contains an independent project or course module:
+This repository centralizes coursework, laboratory assignments, and academic projects developed during my studies at **Universidad Técnica de Manabí (UTM), Ecuador**. Each directory contains an independent project or course module:
 
 | Directory | Project / Course | Stack | Description |
 | :--- | :--- | :--- | :--- |

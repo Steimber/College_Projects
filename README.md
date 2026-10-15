@@ -1,19 +1,21 @@
 <div align="center">
 
-# 🏛️ College_Projects
+# 🐻🌲 College_Projects — UTM 🇪🇨
 
-### Repositorio de Tareas, Laboratorios y Proyectos Universitarios
+### Repositorio de Tareas, Laboratorios y Proyectos Universitarios · **Universidad Técnica de Manabí (Ecuador)**
 
-[![Español](https://img.shields.io/badge/🇪🇸_Idioma-Español_(Activo)-0ea5e9?style=for-the-badge)](./README.md)
-[![English](https://img.shields.io/badge/🇺🇸_Language-English-334155?style=for-the-badge)](./README.en.md)
+[![Español](https://img.shields.io/badge/🇪🇸_Idioma-Español_(Activo)-16a34a?style=for-the-badge&labelColor=07170e)](./README.md)
+[![English](https://img.shields.io/badge/🇺🇸_Language-English-14532d?style=for-the-badge&labelColor=07170e)](./README.en.md)
+[![Mineral Studio](https://img.shields.io/badge/💎_Co--Founder-Mineral_Studio_(mineral--ec.com)-b3613d?style=for-the-badge&labelColor=1c120d)](https://mineral-ec.com/)
+[![Instagram](https://img.shields.io/badge/📸_Instagram-@mineralstudio.ec-d97706?style=for-the-badge&labelColor=1c120d)](https://www.instagram.com/mineralstudio.ec)
 
 </div>
 
 ---
 
-## 📚 Índice de Proyectos
+## 📚 Índice de Proyectos Universitarios (UTM 🇪🇨)
 
-Este repositorio centraliza las tareas, prácticas de laboratorio y proyectos desarrollados durante mis estudios universitarios. Cada carpeta corresponde a un proyecto o asignatura independiente:
+Este repositorio centraliza las tareas, prácticas de laboratorio y proyectos desarrollados durante mis estudios en la **Universidad Técnica de Manabí (UTM), Ecuador**. Cada carpeta corresponde a un proyecto o asignatura independiente:
 
 | Carpeta | Proyecto / Asignatura | Tecnologías | Descripción |
 | :--- | :--- | :--- | :--- |

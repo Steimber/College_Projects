@@ -20,3 +20,4 @@ Este repositorio centraliza las tareas, prácticas de laboratorio y proyectos de
 | Carpeta | Proyecto / Asignatura | Tecnologías | Descripción |
 | :--- | :--- | :--- | :--- |
 | 📂 [`proyecto-geant4`](./proyecto-geant4) | **Simulación de Lluvias de Partículas Atmosféricas** | `C++` `Geant4` `CMake` `Docker` | Configuración en Docker y simulación Monte Carlo en C++ de la producción y propagación de cascadas de partículas secundarias generadas por rayos cósmicos en la atmósfera. |
+| 📂 [`cafeteria_django`](./cafeteria_django) | **Sistema Web Cafetería Universitaria** | `Python` `Django` `SQLite` `HTML/CSS` | Aplicación web en Django con módulos de `servicios` (catálogo y pasarela de pedidos), `blog` (ofertas y promociones por categoría) y panel administrativo de gestión. |

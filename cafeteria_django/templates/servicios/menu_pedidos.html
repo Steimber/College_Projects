@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block title %}Servicios y Pedidos - Cafetería{% endblock %}
+
+{% block content %}
+<div class="box">
+  <h2>Servicios / Menú y Pasarela Simple de Pedidos</h2>
+  <p>Elige la cantidad de cada producto que deseas pedir y llena tus datos abajo para registrar el pedido.</p>
+</div>
+
+<form method="post" action="{% url 'servicios:menu_pedidos' %}">
+  {% csrf_token %}
+
+  <h3>1. Selecciona tus productos del menú</h3>
+  <div class="grid-3" style="margin-bottom: 20px;">
+    {% for srv in todos_servicios %}
+      <div class="item-card">
+        <img src="{{ srv.obtener_imagen }}" alt="{{ srv.titulo }}">
+        <span class="badge">{{ srv.get_tipo_display }}</span>
+        <h3>{{ srv.titulo }}</h3>
+        <p>{{ srv.contenido }}</p>
+        <p class="precio">${{ srv.precio }}</p>
+
+        <label for="qty_{{ srv.id }}"><strong>Cantidad a pedir:</strong></label>
+        <input
+          type="number"
+          id="qty_{{ srv.id }}"
+          name="cantidad_{{ srv.id }}"
+          value="0"
+          min="0"
+          max="30"
+          data-price="{{ srv.precio }}"
+          class="input-cant"
+          onchange="calcularTotal()"
+          oninput="calcularTotal()"
+        >
+
+        <div class="fechas">
+          <div>Creado: {{ srv.created|date:"d/m/Y H:i" }}</div>
+          <div>Actualizado: {{ srv.updated|date:"d/m/Y H:i" }}</div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <div class="box">
+    <h3>2. Pasarela Simple de Pago y Envío del Pedido</h3>
+    <p><strong>Total a pagar calculado: <span id="totalTexto" class="precio">$0.00</span></strong></p>
+
+    <label>Nombre del cliente *:</label>
+    <input type="text" name="cliente_nombre" placeholder="Tu nombre" required>
+
+    <label>Teléfono:</label>
+    <input type="text" name="cliente_telefono" placeholder="0999999999">
+
+    <label>Modalidad:</label>
+    <select name="modalidad">
+      <option value="mesa">Para consumir en mesa</option>
+      <option value="retiro">Para llevar</option>
+      <option value="domicilio">A domicilio</option>
+    </select>
+
+    <label>Número de mesa o dirección *:</label>
+    <input type="text" name="mesa_o_direccion" placeholder="Ej: Mesa 3 o Dirección" required>
+
+    <label>Método de pago:</label>
+    <select name="metodo_pago">
+      <option value="efectivo">Efectivo</option>
+      <option value="deuna_transferencia">Transferencia / Deuna</option>
+      <option value="tarjeta">Tarjeta</option>
+    </select>
+
+    <label>Referencia de pago (opcional):</label>
+    <input type="text" name="referencia_pago" placeholder="Nro de comprobante o pago en caja">
+
+    <label>Notas del pedido:</label>
+    <textarea name="notas" rows="2" placeholder="Ej: sin azúcar"></textarea>
+
+    <button type="submit">Enviar y Guardar Pedido</button>
+  </div>
+</form>
+
+<script>
+  function calcularTotal() {
+    var inputs = document.querySelectorAll('.input-cant');
+    var total = 0;
+    for (var i = 0; i < inputs.length; i++) {
+      var cant = parseInt(inputs[i].value || '0', 10);
+      var precio = parseFloat(inputs[i].getAttribute('data-price') || '0');
+      if (cant > 0) {
+        total += cant * precio;
+      }
+    }
+    document.getElementById('totalTexto').innerText = '$' + total.toFixed(2);
+  }
+</script>
+{% endblock %}

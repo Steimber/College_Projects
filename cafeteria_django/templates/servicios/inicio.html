@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}Inicio - Cafetería{% endblock %}
+
+{% block content %}
+<div class="box">
+  <h2>Bienvenidos a nuestra Cafetería</h2>
+  <p>Sistema web hecho en Django con app de <strong>Servicios (Menú y Pasarela de Pedidos)</strong> y app de <strong>Blog (Ofertas y Promociones)</strong>.</p>
+  <p>
+    <a href="{% url 'servicios:menu_pedidos' %}" class="btn">Ir a Servicios y Hacer Pedido</a>
+    <a href="{% url 'blog:lista' %}" class="btn">Ver Blog de Ofertas</a>
+    <a href="{% url 'servicios:modificar_pagina' %}" class="btn">Modificar Página (Admin)</a>
+  </p>
+</div>
+
+<h2>Productos y Servicios Disponibles</h2>
+<div class="grid-3">
+  {% for srv in servicios %}
+    <div class="item-card">
+      <img src="{{ srv.obtener_imagen }}" alt="{{ srv.titulo }}">
+      <span class="badge">{{ srv.get_tipo_display }}</span>
+      <h3>{{ srv.titulo }}</h3>
+      <p>{{ srv.contenido }}</p>
+      <p class="precio">${{ srv.precio }}</p>
+      <a href="{% url 'servicios:menu_pedidos' %}" class="btn">Pedir aquí</a>
+      <div class="fechas">
+        <div>Creado: {{ srv.created|date:"d/m/Y H:i" }}</div>
+        <div>Actualizado: {{ srv.updated|date:"d/m/Y H:i" }}</div>
+      </div>
+    </div>
+  {% empty %}
+    <p>No hay servicios cargados.</p>
+  {% endfor %}
+</div>
+
+<h2 style="margin-top: 25px;">Últimas Publicaciones y Ofertas del Blog</h2>
+<div class="grid-3">
+  {% for post in ofertas_blog %}
+    <div class="item-card">
+      <img src="{{ post.obtener_imagen }}" alt="{{ post.titulo }}">
+      <div>
+        {% for cat in post.categorias.all %}
+          <span class="badge">{{ cat.nombre }}</span>
+        {% endfor %}
+        {% if post.etiqueta_oferta %}
+          <span class="badge-oferta">{{ post.etiqueta_oferta }}</span>
+        {% endif %}
+      </div>
+      <h3>{{ post.titulo }}</h3>
+      {% if post.subtitulo %}
+        <p><strong>{{ post.subtitulo }}</strong></p>
+      {% endif %}
+      <p>{{ post.contenido|truncatewords:25 }}</p>
+      <div class="fechas">
+        <div>Creado: {{ post.created|date:"d/m/Y H:i" }}</div>
+        <div>Actualizado: {{ post.updated|date:"d/m/Y H:i" }}</div>
+      </div>
+    </div>
+  {% empty %}
+    <p>No hay publicaciones en el blog.</p>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,251 @@
+{% extends 'base.html' %}
+
+{% block title %}Modificar Página (Admin) - Cafetería{% endblock %}
+
+{% block content %}
+<div class="box">
+  <h2>Panel: Modificar Página (Admin)</h2>
+  <p>Desde aquí puedes ver y actualizar los pedidos recibidos en la pasarela, agregar o editar productos de <strong>Servicios</strong> y crear publicaciones u ofertas en el <strong>Blog</strong>.</p>
+  <p>
+    También puedes entrar al panel nativo de Django aquí:
+    <a href="/admin/" class="btn" target="_blank">Abrir Django /admin/ (Usuario: admin / Clave: admin1234)</a>
+  </p>
+</div>
+
+<!-- 1. PEDIDOS RECIBIDOS EN LA PASARELA -->
+<div class="box">
+  <h3>1. Pedidos Recibidos en la Pasarela ({{ pedidos|length }})</h3>
+  {% if pedidos %}
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Cliente / Teléfono</th>
+          <th>Modalidad / Lugar</th>
+          <th>Productos Solicitados</th>
+          <th>Pago</th>
+          <th>Total</th>
+          <th>Fechas (created / updated)</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for ped in pedidos %}
+          <tr>
+            <td><strong>#{{ ped.id }}</strong></td>
+            <td>{{ ped.cliente_nombre }}<br><small>{{ ped.cliente_telefono }}</small></td>
+            <td>{{ ped.get_modalidad_display }}<br><small>{{ ped.mesa_o_direccion }}</small></td>
+            <td>
+              {{ ped.resumen_pedido }}
+              {% if ped.notas %}
+                <br><small><em>Nota: {{ ped.notas }}</em></small>
+              {% endif %}
+            </td>
+            <td>{{ ped.get_metodo_pago_display }}<br><small>{{ ped.referencia_pago }}</small></td>
+            <td class="precio">${{ ped.total }}</td>
+            <td>
+              <small>Creado: {{ ped.created|date:"d/m/Y H:i:s" }}</small><br>
+              <small>Actualizado: {{ ped.updated|date:"d/m/Y H:i:s" }}</small>
+            </td>
+            <td>
+              <form method="post" action="{% url 'servicios:modificar_pagina' %}">
+                {% csrf_token %}
+                <input type="hidden" name="accion" value="cambiar_estado_pedido">
+                <input type="hidden" name="pedido_id" value="{{ ped.id }}">
+                <select name="estado" style="margin-bottom: 4px;">
+                  {% for val, nombre in estados_pedido %}
+                    <option value="{{ val }}" {% if ped.estado == val %}selected{% endif %}>{{ nombre }}</option>
+                  {% endfor %}
+                </select>
+                <button type="submit">Guardar</button>
+              </form>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>Todavía no hay pedidos registrados.</p>
+  {% endif %}
+</div>
+
+<!-- 2. CREAR Y MODIFICAR PRODUCTOS / SERVICIOS -->
+<div class="box">
+  <h3>2. Crear Nuevo Producto / Servicio</h3>
+  <form method="post" action="{% url 'servicios:modificar_pagina' %}">
+    {% csrf_token %}
+    <input type="hidden" name="accion" value="crear_servicio">
+
+    <label>Nombre del producto *:</label>
+    <input type="text" name="titulo" placeholder="Ej: Cappuccino Manabita" required>
+
+    <label>Categoría:</label>
+    <select name="tipo">
+      {% for val, nombre in categorias_servicio %}
+        <option value="{{ val }}">{{ nombre }}</option>
+      {% endfor %}
+    </select>
+
+    <label>Precio (USD) *:</label>
+    <input type="number" step="0.01" name="precio" value="2.50" required>
+
+    <label>Descripción:</label>
+    <textarea name="contenido" rows="2" placeholder="Ingredientes o detalle del producto" required></textarea>
+
+    <label>URL de imagen (opcional):</label>
+    <input type="text" name="imagen_url" placeholder="https://...">
+
+    <p>
+      <label class="checkbox-label" for="disp_nuevo">
+        <input type="checkbox" id="disp_nuevo" name="disponible" class="visually-hidden" checked>
+        <span>Disponible en el menú</span>
+      </label>
+    </p>
+
+    <button type="submit">Agregar Producto</button>
+  </form>
+
+  <h3 style="margin-top: 25px;">Productos Actuales (Modificar / Eliminar)</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Producto</th>
+        <th>Categoría</th>
+        <th>Precio (USD)</th>
+        <th>Descripción</th>
+        <th>Fechas (created / updated)</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for srv in servicios %}
+        <tr>
+          <form method="post" action="{% url 'servicios:modificar_pagina' %}">
+            {% csrf_token %}
+            <input type="hidden" name="accion" value="editar_servicio">
+            <input type="hidden" name="servicio_id" value="{{ srv.id }}">
+            <td>
+              <input type="text" name="titulo" value="{{ srv.titulo }}" required>
+              <input type="hidden" name="imagen_url" value="{{ srv.imagen_url }}">
+            </td>
+            <td>
+              <select name="tipo">
+                {% for val, nombre in categorias_servicio %}
+                  <option value="{{ val }}" {% if srv.tipo == val %}selected{% endif %}>{{ nombre }}</option>
+                {% endfor %}
+              </select>
+            </td>
+            <td>
+              <input type="number" step="0.01" name="precio" value="{{ srv.precio }}" required>
+            </td>
+            <td>
+              <input type="text" name="contenido" value="{{ srv.contenido }}">
+              <label class="checkbox-label" for="disp_{{ srv.id }}">
+                <input type="checkbox" id="disp_{{ srv.id }}" name="disponible" class="visually-hidden" {% if srv.disponible %}checked{% endif %}>
+                <span>Disponible</span>
+              </label>
+            </td>
+            <td>
+              <small>Creado: {{ srv.created|date:"d/m/Y H:i" }}</small><br>
+              <small>Actualizado: {{ srv.updated|date:"d/m/Y H:i" }}</small>
+            </td>
+            <td>
+              <button type="submit">Actualizar</button>
+            </td>
+          </form>
+          <td>
+            <form method="post" action="{% url 'servicios:modificar_pagina' %}">
+              {% csrf_token %}
+              <input type="hidden" name="accion" value="eliminar_servicio">
+              <input type="hidden" name="servicio_id" value="{{ srv.id }}">
+              <button type="submit" class="btn-rojo">Eliminar</button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- 3. GESTIONAR BLOG Y OFERTAS -->
+<div class="box">
+  <h3>3. Publicar en el Blog (Ofertas, Promociones, Novedades)</h3>
+  <form method="post" action="{% url 'servicios:modificar_pagina' %}">
+    {% csrf_token %}
+    <input type="hidden" name="accion" value="crear_post_blog">
+
+    <label>Título de la publicación / oferta *:</label>
+    <input type="text" name="titulo" placeholder="Ej: 2x1 en Frappés todos los jueves" required>
+
+    <label>Subtítulo corto:</label>
+    <input type="text" name="subtitulo" placeholder="Ej: Válido de 14:00 a 18:00 para estudiantes">
+
+    <label>Etiqueta de oferta (ej: 2x1, -20% OFF, Oferta):</label>
+    <input type="text" name="etiqueta_oferta" placeholder="Ej: 2x1">
+
+    <label>Categorías del Blog (mantén Ctrl para elegir varias):</label>
+    <select name="categorias" multiple size="4">
+      {% for cat in categorias %}
+        <option value="{{ cat.id }}" {% if forloop.first %}selected{% endif %}>{{ cat.nombre }}</option>
+      {% endfor %}
+    </select>
+
+    <label>Contenido *:</label>
+    <textarea name="contenido" rows="3" placeholder="Escribe los detalles de la oferta o noticia..." required></textarea>
+
+    <label>URL de imagen (opcional):</label>
+    <input type="text" name="imagen_url" placeholder="https://...">
+
+    <button type="submit">Publicar en el Blog</button>
+  </form>
+
+  <h4 style="margin-top: 20px;">Crear nueva categoría para el Blog</h4>
+  <form method="post" action="{% url 'servicios:modificar_pagina' %}">
+    {% csrf_token %}
+    <input type="hidden" name="accion" value="crear_categoria_blog">
+    <label>Nombre de categoría (ej: Ofertas, Descuentos, Eventos):</label>
+    <input type="text" name="nombre" placeholder="Ej: Combos Estudiantiles" required>
+    <label>Descripción:</label>
+    <input type="text" name="descripcion" placeholder="Descripción opcional">
+    <button type="submit">Crear Categoría</button>
+  </form>
+
+  <h3 style="margin-top: 25px;">Publicaciones Actuales del Blog</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Título</th>
+        <th>Categorías</th>
+        <th>Oferta</th>
+        <th>Fechas (created / updated)</th>
+        <th>Acción</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for post in posts %}
+        <tr>
+          <td><strong>{{ post.titulo }}</strong><br><small>{{ post.subtitulo }}</small></td>
+          <td>
+            {% for c in post.categorias.all %}
+              <span class="badge">{{ c.nombre }}</span>
+            {% endfor %}
+          </td>
+          <td>{{ post.etiqueta_oferta|default:"-" }}</td>
+          <td>
+            <small>Creado: {{ post.created|date:"d/m/Y H:i" }}</small><br>
+            <small>Actualizado: {{ post.updated|date:"d/m/Y H:i" }}</small>
+          </td>
+          <td>
+            <form method="post" action="{% url 'servicios:modificar_pagina' %}">
+              {% csrf_token %}
+              <input type="hidden" name="accion" value="eliminar_post_blog">
+              <input type="hidden" name="post_id" value="{{ post.id }}">
+              <button type="submit" class="btn-rojo">Eliminar</button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

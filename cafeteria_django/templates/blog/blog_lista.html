@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}Blog y Ofertas - Cafetería{% endblock %}
+
+{% block content %}
+<div class="box">
+  <h2>Blog de la Cafetería: Ofertas, Promociones y Novedades</h2>
+  <p>Filtra las publicaciones por categoría:</p>
+  <p>
+    <a href="{% url 'blog:lista' %}" class="btn">Todas las categorías</a>
+    {% for cat in categorias %}
+      <a href="{% url 'blog:categoria' cat.id %}" class="btn" {% if categoria_actual and categoria_actual.id == cat.id %}style="background-color: #d97724;"{% endif %}>
+        {{ cat.nombre }}
+      </a>
+    {% endfor %}
+  </p>
+  {% if categoria_actual %}
+    <p>Mostrando publicaciones de la categoría: <strong>{{ categoria_actual.nombre }}</strong> ({{ categoria_actual.descripcion }})</p>
+  {% endif %}
+</div>
+
+<div class="grid-3">
+  {% for post in posts %}
+    <div class="item-card">
+      <img src="{{ post.obtener_imagen }}" alt="{{ post.titulo }}" loading="lazy">
+      <div style="margin-top: 8px;">
+        {% for cat in post.categorias.all %}
+          <a href="{% url 'blog:categoria' cat.id %}" class="badge" style="text-decoration: none;">{{ cat.nombre }}</a>
+        {% endfor %}
+        {% if post.etiqueta_oferta %}
+          <span class="badge-oferta">{{ post.etiqueta_oferta }}</span>
+        {% endif %}
+      </div>
+      <h3>{{ post.titulo }}</h3>
+      {% if post.subtitulo %}
+        <p><strong>{{ post.subtitulo }}</strong></p>
+      {% endif %}
+      <p>{{ post.contenido }}</p>
+      <div class="fechas">
+        <div>Autor: {{ post.autor.username|default:"admin" }}</div>
+        <div>Creado (created): {{ post.created|date:"d/m/Y H:i:s" }}</div>
+        <div>Actualizado (updated): {{ post.updated|date:"d/m/Y H:i:s" }}</div>
+      </div>
+    </div>
+  {% empty %}
+    <p>No hay publicaciones en esta categoría.</p>
+  {% endfor %}
+</div>
+{% endblock %}

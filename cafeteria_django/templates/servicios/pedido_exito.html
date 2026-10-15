@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}Pedido Confirmado{% endblock %}
+
+{% block content %}
+<div class="box">
+  <h2>Comprobante de Pedido #{{ pedido.id }}</h2>
+  <p>El pedido se ha guardado correctamente en la base de datos.</p>
+
+  <ul>
+    <li><strong>Cliente:</strong> {{ pedido.cliente_nombre }}</li>
+    <li><strong>Teléfono:</strong> {{ pedido.cliente_telefono }}</li>
+    <li><strong>Modalidad:</strong> {{ pedido.get_modalidad_display }} ({{ pedido.mesa_o_direccion }})</li>
+    <li><strong>Método de Pago:</strong> {{ pedido.get_metodo_pago_display }}</li>
+    <li><strong>Estado:</strong> {{ pedido.get_estado_display }}</li>
+    <li><strong>Fecha Creación (created):</strong> {{ pedido.created|date:"d/m/Y H:i:s" }}</li>
+    <li><strong>Fecha Actualización (updated):</strong> {{ pedido.updated|date:"d/m/Y H:i:s" }}</li>
+  </ul>
+
+  <h3>Productos del pedido:</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Producto</th>
+        <th>Cantidad</th>
+        <th>Precio Unitario</th>
+        <th>Subtotal</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in pedido.detalles.all %}
+        <tr>
+          <td>{{ item.nombre_producto }}</td>
+          <td>{{ item.cantidad }}</td>
+          <td>${{ item.precio_unitario }}</td>
+          <td>${{ item.subtotal }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <p class="precio" style="margin-top: 15px;">Total: ${{ pedido.total }}</p>
+
+  <p>
+    <a href="{% url 'servicios:menu_pedidos' %}" class="btn">Volver a Servicios</a>
+    <a href="{% url 'servicios:modificar_pagina' %}" class="btn">Ver en Modificar Página (Admin)</a>
+  </p>
+</div>
+{% endblock %}

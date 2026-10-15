@@ -1,0 +1,37 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Cafetería Django{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1><a href="{% url 'servicios:inicio' %}">Cafetería Mi Café</a></h1>
+      <nav>
+        <a href="{% url 'servicios:inicio' %}">Inicio</a>
+        <a href="{% url 'servicios:menu_pedidos' %}">Servicios y Pedidos</a>
+        <a href="{% url 'blog:lista' %}">Blog (Ofertas)</a>
+        <a href="{% url 'servicios:modificar_pagina' %}" class="btn-admin-header">Modificar Página (Admin)</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="container">
+    {% if messages %}
+      {% for message in messages %}
+        <div class="mensaje">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+
+    {% block content %}{% endblock %}
+  </div>
+
+  <footer>
+    <p>Proyecto Universitario en Django - Cafetería (Apps: Servicios y Blog)</p>
+  </footer>
+</body>
+</html>

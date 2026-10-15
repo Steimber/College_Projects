@@ -1,0 +1,3 @@
+/geant4lab/proyecto_lluvias_cosmicas/build/CMakeFiles/sim.dir
+/geant4lab/proyecto_lluvias_cosmicas/build/CMakeFiles/edit_cache.dir
+/geant4lab/proyecto_lluvias_cosmicas/build/CMakeFiles/rebuild_cache.dir

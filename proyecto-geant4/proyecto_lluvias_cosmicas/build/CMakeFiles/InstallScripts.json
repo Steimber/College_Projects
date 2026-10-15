@@ -1,0 +1,7 @@
+{
+	"InstallScripts" : 
+	[
+		"/geant4lab/proyecto_lluvias_cosmicas/build/cmake_install.cmake"
+	],
+	"Parallel" : false
+}
